@@ -6,3 +6,7 @@ before_script:
 - npm install -g bower
 - npm install --no-bin-links
 - bower install
+env:
+  global:
+  - secure: zd4QNmAtVCFfFXO+O5Q399qJCC1mxxp5knQafv3wtkTdpaz2g6p9OnQleVSVeSbn9YbrG3Cn7l+1KYivQBV5pr3ydA3FRKlBl7lYo2gOt9WVRCgWXiGyXYjII/yzZ7M6JpjMSg23xaM+MAklYiYjTpXUMCWTdqPK2PuNWUGn6EA=
+  - secure: mzYp+3r36I0rbAtOrbpDr9fhk1520uv2K+uvaCajqpW3eynuZYHZ11SpFGEjLCCL566cE79S+aHKAFtHICbI6yi/iQsstDErMaR/mLFHKPl631163tvmjFLlGD2p7PCEDJsS3bUoNU7VOSg+SMN0vlTtfk0VEm15e83UbcLLMPk=

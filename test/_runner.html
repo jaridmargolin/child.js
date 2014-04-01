@@ -22,7 +22,13 @@
         urlArgs: 'bust=' + (new Date()).getTime(),
         paths: {
           'proclaim' : '/node_modules/proclaim/lib/proclaim',
+          'sinon'    : '/node_modules/sinon/pkg/sinon',
           'mocha'    : '/node_modules/mocha/mocha'
+        },
+        shim: {
+          'sinon': {
+            exports: 'sinon'
+          }
         }
       }).run({
         name: 'mocha',

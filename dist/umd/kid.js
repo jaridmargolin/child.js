@@ -26,10 +26,10 @@
 var kid = function (Parent, protos) {
   // Our new baby :D
   var Child;
-  // Javascripts proto constructor makes things a
-  // a pain so we are making a conscious decision
+  // Javascripts constructor makes things a pain
+  // so we are making a conscious decision
   // to use only user defined constructors!
-  if (!protos.hasOwnProperty('constructor')) {
+  if (protos.hasOwnProperty('constructor')) {
     Child = protos.constructor;
   } else {
     Child = function () {
@@ -41,10 +41,10 @@ var kid = function (Parent, protos) {
   var Surrogate = function () {
     this.constructor = Child;
   };
-  // + Surogate
+  // + Surrogate
   //   - constructor (defined above in Child)
   //   - prototype (Parent)
-  Surogate.prototype = Parent.prototype;
+  Surrogate.prototype = Parent.prototype;
   // + Child
   //   + prototype (Surrogate)
   //     - constructor (Child)
@@ -52,10 +52,12 @@ var kid = function (Parent, protos) {
   Child.prototype = new Surrogate();
   // Want wa way to communicate with the 
   // super class using the correct context.
-  Child._super = Parent.prototype;
+  Child.prototype.super = function (name, args) {
+    Parent.prototype[name].apply(this, args);
+  };
   // Mixin protos
-  for (var key in protoPros) {
-    Child.prototype[key] = protoProps[key];
+  for (var key in protos) {
+    Child.prototype[key] = protos[key];
   }
   // Return class yo!
   return Child;

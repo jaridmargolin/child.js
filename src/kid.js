@@ -19,15 +19,15 @@ return function (Parent, protos) {
   // Our new baby :D
   var Child;
 
-  // Javascripts proto constructor makes things a
-  // a pain so we are making a conscious decision
+  // Javascripts constructor makes things a pain
+  // so we are making a conscious decision
   // to use only user defined constructors!
-  if (!protos.hasOwnProperty('constructor')) {
+  if (protos.hasOwnProperty('constructor')) {
     Child = protos.constructor;
   } else {
     Child = function () {
       return Parent.apply(this, arguments);
-    }
+    };
   }
 
   // Function used to set up correct
@@ -36,10 +36,10 @@ return function (Parent, protos) {
     this.constructor = Child;
   };
 
-  // + Surogate
+  // + Surrogate
   //   - constructor (defined above in Child)
   //   - prototype (Parent)
-  Surogate.prototype = Parent.prototype;
+  Surrogate.prototype = Parent.prototype;
 
   // + Child
   //   + prototype (Surrogate)
@@ -49,15 +49,17 @@ return function (Parent, protos) {
 
   // Want wa way to communicate with the 
   // super class using the correct context.
-  Child._super = Parent.prototype;
+  Child.prototype.super = function (name, args) {
+    Parent.prototype[name].apply(this, args);
+  };
 
   // Mixin protos
-  for (var key in protoPros) {
-    Child.prototype[key] = protoProps[key];
+  for (var key in protos) {
+    Child.prototype[key] = protos[key];
   }
 
   // Return class yo!
-  return Child
+  return Child;
 };
 
 
