@@ -31,7 +31,7 @@ bower install kid
 
 ### kid(Parent, child)
 
-Create a a new object whos prototype chain includes the specified parent element. The constructor of the child element will be the same as the parents (called with correct context), unless passed in as a property of the child object. The child also exposes a method `super` that takes the name of a method found in the parent class, and an array of arguments, to call with Child set as the context.
+Create a a new object whos prototype chain includes the specified parent element. The constructor of the child element will be the same as the parents (called with correct context), unless passed in as a property of the child object.
 
 #### Parameters
 

@@ -80,17 +80,6 @@ describe('kid', function () {
     assert.equal(child.sayYo(), 'Yo Jarid');
   });
 
-  it('Should have direct access to parent via _super.', function () {
-    var Child = kid(Parent, {
-      constructor: function (name) {
-        this.super('constructor', arguments);
-        assert.equal(this.name, 'jarid');
-      }
-    });
-
-    var child = new Child('jarid');
-  });
-
 });
 
 
