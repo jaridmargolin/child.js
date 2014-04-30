@@ -80,6 +80,19 @@ describe('kid', function () {
     assert.equal(child.sayYo(), 'Yo Jarid');
   });
 
+  it('Should pass static properties set on Parent to Child', function () {
+    var Child1 = kid(Parent, child1);
+    Child1.test = function () {
+      assert.ok(true);
+    };
+
+    var Child3 = kid(Child1, child2),
+        child  = new Child3('jarid');
+
+    assert.ok(Child3.test);
+    assert.notOk(child.test);
+  });
+
 });
 
 

@@ -21,6 +21,10 @@ var kid = function (Parent, protos) {
       return Parent.apply(this, arguments);
     };
   }
+  // Mixin static props directly set on parent
+  for (var i in Parent) {
+    Child[i] = Parent[i];
+  }
   // Function used to set up correct
   // prototype chain
   var Surrogate = function () {
@@ -35,8 +39,8 @@ var kid = function (Parent, protos) {
   //     - prototype(Parent)
   Child.prototype = new Surrogate();
   // Mixin protos
-  for (var key in protos) {
-    Child.prototype[key] = protos[key];
+  for (var j in protos) {
+    Child.prototype[j] = protos[j];
   }
   // Return class yo!
   return Child;
