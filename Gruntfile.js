@@ -24,17 +24,21 @@ var browsers = [
   { browserName: 'internet explorer', platform: 'XP', version: '8' }
 ];
 
+
 // Config
 grunt.initConfig({
 
   // --------------------------------------------------------------------------
   // PKG CONFIG
   // --------------------------------------------------------------------------
+
   'pkg': grunt.file.readJSON('package.json'),
+
 
   // --------------------------------------------------------------------------
   // JSHINT
   // --------------------------------------------------------------------------
+
   'jshint': {
     src: [
       'Gruntfile.js',
@@ -51,14 +55,21 @@ grunt.initConfig({
     }
   },
 
+
   // --------------------------------------------------------------------------
   // CLEAN (EMPTY DIRECTORY)
   // --------------------------------------------------------------------------
-  'clean': ['dist'],
+
+  'clean': {
+    js: ['dist'],
+    build: ['dist/*.*']
+  },
+
 
   // --------------------------------------------------------------------------
   // REQUIREJS BUILD
   // --------------------------------------------------------------------------
+
   'requirejs': {
     compile: {
       options: {
@@ -67,58 +78,45 @@ grunt.initConfig({
         out: 'dist/kid.js',
         optimize: 'none',
         skipModuleInsertion: true,
-        onBuildWrite: function(name, path, contents) {
-          return require('amdclean').clean({
-            code: contents,
+        onModuleBundleComplete: function(data) {
+          var fs = require('fs'),
+            amdclean = require('amdclean'),
+            outputFile = data.path;
+
+          fs.writeFileSync(outputFile, amdclean.clean({
+            filePath: outputFile,
             prefixMode: 'camelCase',
+            wrap: false,
             escodegen: {
               format: {
                 indent: { style: '  ' }
               }
             }
-          });
+          }));
         }
       }
     }
   },
 
+
   // --------------------------------------------------------------------------
   // UMD WRAP
   // --------------------------------------------------------------------------
+
   'umd': {
-    umd: {
+    all: {
       src: 'dist/kid.js',
       objectToExport: 'kid',
       globalAlias: 'kid',
-      template: 'src/tmpls/umd.hbs',
-      dest: 'dist/umd/kid.js'
-    },
-    amd: {
-      src: 'dist/kid.js',
-      objectToExport: 'kid',
-      globalAlias: 'kid',
-      template: 'src/tmpls/amd.hbs',
-      dest: 'dist/amd/kid.js'
-    },
-    common: {
-      src: 'dist/kid.js',
-      objectToExport: 'kid',
-      globalAlias: 'kid',
-      template: 'src/tmpls/common.hbs',
-      dest: 'dist/common/kid.js'
-    },
-    standalone: {
-      src: 'dist/kid.js',
-      objectToExport: 'kid',
-      globalAlias: 'kid',
-      template: 'src/tmpls/standalone.hbs',
       dest: 'dist/kid.js'
     }
   },
 
+
   // --------------------------------------------------------------------------
   // MINIFY JS
   // --------------------------------------------------------------------------
+
   'uglify': {
     all: {
       expand: true,
@@ -129,22 +127,83 @@ grunt.initConfig({
     }
   },
 
+
+  // --------------------------------------------------------------------------
+  // CREATE COMMONJS VERSION IN DIST
+  // --------------------------------------------------------------------------
+
+  'nodefy': {
+    all: {
+      expand: true,
+      src: ['**/*.js'],
+      cwd: 'src/',
+      dest: 'dist/common'
+    }
+  },
+
+
+  // --------------------------------------------------------------------------
+  // Copy Parts
+  // --------------------------------------------------------------------------
+
+  'copy': {
+    js: {
+      expand: true,
+      src: ['**/*.js'],
+      cwd: 'src',
+      dest: 'dist/amd'
+    }
+  },
+
+
+  // --------------------------------------------------------------------------
+  // WATCH FILES
+  // --------------------------------------------------------------------------
+
+  'watch': {
+    options: {
+      spawn: true
+    },
+    grunt: {
+      files: ['Gruntfile.js'],
+      tasks: ['build'],
+      options: { livereload: true }
+    },
+    tests: {
+      files: ['test/**/*.*'],
+      options: { livereload: true }
+    },
+    js: {
+      files: ['src/**/*.js'],
+      tasks: ['build:js'],
+      options: { livereload: true }
+    }
+  },
+
+
   // --------------------------------------------------------------------------
   // STATIC SERVER
   // --------------------------------------------------------------------------
+
   'connect': {
     server: {
       options: { base: '', port: 9999 }
     }
   },
 
+
   // --------------------------------------------------------------------------
   // TESTS
   // --------------------------------------------------------------------------
+
   'saucelabs-mocha': {
     all: {
       options: {
-        urls: ['http://127.0.0.1:9999/test/_runner.html'],
+        urls: [
+          'http://127.0.0.1:9999/test/_runner.html',
+          'http://127.0.0.1:9999/test/_dist-amd.html',
+          'http://127.0.0.1:9999/test/_dist-umd.html'
+        ],
         build: process.env.TRAVIS_JOB_ID || '<%= pkg.version %>',
         tunnelTimeout: 5,
         concurrency: 3,
@@ -154,19 +213,36 @@ grunt.initConfig({
     }
   },
 
+
   // --------------------------------------------------------------------------
   // MOCHA
   // --------------------------------------------------------------------------
+
   'mocha_phantomjs': {
-    all: ['test/_runner.html']
+    all: [
+      'test/_runner.html',
+      'test/_dist-amd.html',
+      'test/_dist-umd.html'
+    ]
   }
 
 });
 
-// Tasks    
-grunt.registerTask('default', ['jshint:src', 'clean', 'requirejs', 'umd:umd', 'umd:amd', 'umd:common', 'umd:standalone', 'uglify', 'jshint:build']);
-grunt.registerTask('test-local', ['default', 'mocha_phantomjs']);
-grunt.registerTask('test', ['default', 'connect', 'saucelabs-mocha']);
+
+// DEFAULT
+grunt.registerTask('default', ['build']);
+
+// BUILD
+grunt.registerTask('build', ['build:js']);
+grunt.registerTask('build:js', ['clean:js', 'jshint:src', 'requirejs', 'umd', 'uglify', 'copy:js', 'nodefy']);
+
+// TEST
+grunt.registerTask('test', ['test-local']);
+grunt.registerTask('test-local', ['jshint', 'mocha_phantomjs']);
+grunt.registerTask('test-sauce', ['jshint', 'connect', 'saucelabs-mocha']);
+
+// DEVELOP
+grunt.registerTask('dev', ['build', 'connect', 'watch']);
 
 
 };

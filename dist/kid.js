@@ -1,5 +1,14 @@
-;(function () {
-
+(function(root, factory) {
+    if(typeof exports === 'object') {
+        module.exports = factory();
+    }
+    else if(typeof define === 'function' && define.amd) {
+        define([], factory);
+    }
+    else {
+        root['kid'] = factory();
+    }
+}(this, function() {
 
 /*!
  * kid.js:
@@ -9,7 +18,8 @@
  *
  * Originally adapted from: http://backbonejs.org/
  */
-var kid = function (Parent, protos) {
+var kid;
+kid = function (Parent, protos) {
   // Our new baby :D
   var Child;
   // Child can set constructor by passing in with
@@ -46,11 +56,6 @@ var kid = function (Parent, protos) {
   return Child;
 };
 
+return kid;
 
-
-this['kid'] = kid;
-
-
-
-
-}());
+}));

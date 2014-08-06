@@ -23,7 +23,8 @@
         paths: {
           'proclaim' : '/node_modules/proclaim/lib/proclaim',
           'sinon'    : '/node_modules/sinon/pkg/sinon',
-          'mocha'    : '/node_modules/mocha/mocha'
+          'mocha'    : '/node_modules/mocha/mocha',
+          'kid'      : '/dist/kid'
         },
         shim: {
           'sinon': {
@@ -33,7 +34,7 @@
       }).run({
         name: 'mocha',
         tests: [
-          './kid.js'
+          './_dist-umd.js'
         ]
       });
     </script>
