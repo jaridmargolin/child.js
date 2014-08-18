@@ -1,4 +1,12 @@
 {
-  "name": "kid",
-  "version": "0.1.0"
+  "name": "child.js",
+  "version": "0.2.0",
+  "ignore": [
+    "**/.*",
+    "Gruntfile.js",
+    "src",
+    "docs",
+    "test",
+    "build"
+  ]
 }

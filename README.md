@@ -1,35 +1,14 @@
-kid [![Build Status](https://travis-ci.org/jaridmargolin/kid.png)](https://travis-ci.org/jaridmargolin/kid)
+child.js [![Build Status](https://travis-ci.org/jaridmargolin/child.js.png)](https://travis-ci.org/jaridmargolin/child.js)
 ===
-
 
 Inheritance for Javascript. Cleanly sets a usable prototype chain. Code closely mirrors and was based off of `Backbone.extend`. Packaged to be used in various environments (AMD, COMMON, UMD, STANDALONE).
 
-
----
-
-
-## Install
-
-**with NPM**
-
-```
-$ npm install kid
-```
-
-**or with Bower**
-
-```
-bower install kid
-```
-
-
----
 
 
 ## API
 
 
-### kid(Parent, child)
+### child(Parent, child)
 
 Create a a new object whos prototype chain includes the specified parent element. The constructor of the child element will be the same as the parents (called with correct context), unless passed in as a property of the child object.
 
@@ -41,13 +20,11 @@ Create a a new object whos prototype chain includes the specified parent element
 **Example:**
 
 ```
-var Parent = kid(Object, {
-  constructor: function (name) {
-    this.name = name
-  }
-});
+var Parent = function (name) {
+  this.name = name
+}
 
-var Child = kid(Object, {
+var Child = child(Object, {
   sayHi: function () {
     console.log('Hi ' + this.name + '!');
   }
@@ -58,11 +35,9 @@ john.sayHi();
 // >> Hi john!
 ```
 
----
+
 
 ## TESTS
-
-### Local
 
 **Install Dependencies**
 
@@ -70,18 +45,13 @@ john.sayHi();
 npm install
 ```
 
-```
-bower install
-```
-
 **Run/View**
 
 ```
-grunt test-local
+grunt test
 ```
 
 
----
 
 ## License
 

@@ -1,19 +1,16 @@
 /*!
- * kid.js:
- *
+ * test/child.js
+ * 
  * Copyright (c) 2014
- * MIT LICENCE
- *
- * Originally adapted from: http://backbonejs.org/
  */
-
 
 define(function () {
 
 
-// ----------------------------------------------------------------------------
-// kid
-// ----------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------
+ * child
+ * originally adapted from: http://backbonejs.org/
+ * ---------------------------------------------------------------------------*/
 
 return function (Parent, protos) {
   // Our new baby :D

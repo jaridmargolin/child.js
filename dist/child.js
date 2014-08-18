@@ -1,25 +1,26 @@
-(function(root, factory) {
-    if(typeof exports === 'object') {
-        module.exports = factory();
-    }
-    else if(typeof define === 'function' && define.amd) {
-        define([], factory);
-    }
-    else {
-        root['kid'] = factory();
-    }
-}(this, function() {
+(function (root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    // AMD. Register as an anonymous module.
+    define([], function () {
+      return (root.returnExportsGlobal = factory());
+    });
+  } else if (typeof exports === 'object') {
+    // Node. Does not work with strict CommonJS, but
+    // only CommonJS-like enviroments that support module.exports,
+    // like Node.
+    module.exports = factory();
+  } else {
+    root['child'] = factory();
+  }
+}(this, function () {
 
 /*!
- * kid.js:
- *
+ * test/child.js
+ * 
  * Copyright (c) 2014
- * MIT LICENCE
- *
- * Originally adapted from: http://backbonejs.org/
  */
-var kid;
-kid = function (Parent, protos) {
+var child;
+child = function (Parent, protos) {
   // Our new baby :D
   var Child;
   // Child can set constructor by passing in with
@@ -56,6 +57,7 @@ kid = function (Parent, protos) {
   return Child;
 };
 
-return kid;
+return child;
+
 
 }));
