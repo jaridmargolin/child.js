@@ -9,9 +9,36 @@ define(function () {
 
 /* -----------------------------------------------------------------------------
  * child
- * originally adapted from: http://backbonejs.org/
  * ---------------------------------------------------------------------------*/
 
+/**
+ * Inheritance for Javascript. Cleanly sets
+ * inerheritance prototype chain.
+ * originally adapted from: http://backbonejs.org/
+ *
+ * @example
+ * var Parent = function (name) {
+ *   this.name = name
+ * }
+ * 
+ * var Child = child(Object, {
+ *   sayHi: function () {
+ *     console.log('Hi ' + this.name + '!');
+ *   }
+ * });
+ * 
+ * var john = new Child('john');
+ * john.sayHi();
+ * // >> Hi john!
+ *
+ * @public
+ *
+ * @param {object} Parent - Object to `inherit` prototyped methods from.
+ * @param {object} child - Object containing the methods/properties to add
+ *   to new objects prototype.
+ *
+ * @returns Child class.
+ */
 return function (Parent, protos) {
   // Our new baby :D
   var Child;
